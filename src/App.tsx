@@ -11,7 +11,7 @@ function WhoIsHere() {
   );
 
   return (
-    <div className="who_is_here">
+    <div className="text text-center text-slate-700">
       There are {othersUsersCount} other users online
     </div>
   );
