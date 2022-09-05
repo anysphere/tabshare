@@ -22,15 +22,14 @@ function WhoIsHere() {
 export default function App() {
   const dispatch = useDispatch();
 
+  const room =
+    typeof window !== "undefined" ? window.location.pathname.slice(1) : "";
+
   useEffect(() => {
-    dispatch(
-      actions.enterRoom("redux-demo-room", {
-        todos: [],
-      })
-    );
+    dispatch(actions.enterRoom(room, {}));
 
     return () => {
-      dispatch(actions.leaveRoom("redux-demo-room"));
+      dispatch(actions.leaveRoom(room));
     };
   }, [dispatch]);
 
