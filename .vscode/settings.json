@@ -10,4 +10,9 @@
     "[typescriptreact]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "eslint.options": {
+      "parserOptions": {
+        "createDefaultProgram": true,
+      }
+    }
   }

@@ -1,7 +1,3 @@
-// Function: update
-// Description: check the state of tabs in chrome.
-//              create a new tab if there is no tab with the url.
-
 function update(url: string) {
   chrome.tabs.query({ url: "https://www.google.com/" }, function (tabs) {
     if (tabs.length == 0) {
