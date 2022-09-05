@@ -1,5 +1,5 @@
 import { current } from "@reduxjs/toolkit";
-import { assert } from "console";
+
 import { Tab } from "./tabs";
 
 function longestCommonSubsequence(
@@ -12,10 +12,12 @@ function longestCommonSubsequence(
   const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
-      if (a[i - 1] === b[j - 1]) {
-        dp[i][j] = dp[i - 1][j - 1] + 1;
+      if (compare(a[i - 1]!, b[j - 1]!)) {
+        if (dp[i - 1] === undefined) return [[], []];
+        if (dp[i] === undefined) return [[], []];
+        dp[i]![j] = dp[i - 1]![j - 1] + 1;
       } else {
-        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+        dp[i]![j] = Math.max(dp[i - 1]![j], dp[i]![j - 1]);
       }
     }
   }
@@ -31,7 +33,7 @@ function longestCommonSubsequence(
       res_b.push(j - 1);
       i--;
       j--;
-    } else if (dp[i - 1][j] > dp[i][j - 1]) {
+    } else if (dp[i - 1]![j] > dp[i]![j - 1]) {
       i--;
     } else {
       j--;
@@ -41,7 +43,7 @@ function longestCommonSubsequence(
   return [res_a.reverse(), res_b.reverse()];
 }
 
-async function update(tabs: Tab[], windowID: number): void {
+async function update(tabs: Tab[], windowID: number): Promise<void> {
   // get the tab list from the chrome
   const currentTabs = await chrome.tabs.query({ windowId: windowID });
 
