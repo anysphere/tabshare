@@ -6,8 +6,14 @@ const client = createClient({
   publicApiKey: "pk_test_6pBKexoYixbVjxlaZs6pSzLY",
 });
 
+type Tab = {
+  url: string;
+  creator: string;
+  timestamp: number;
+};
+
 const initialState = {
-  tabs: Array<String>(),
+  tabs: Array<Tab>(),
 };
 
 const slice = createSlice({
