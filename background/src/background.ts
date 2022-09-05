@@ -82,8 +82,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-chrome.tabs.onCreated.addListener((tab) => {
-  chrome.runtime.sendMessage({
+chrome.tabs.onCreated.addListener(async (tab) => {
+  const currentTabs = await chrome.tabs.query({ windowId: tab.windowId });
+
+  // find the tab that has url containing tabs.day
+  const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
+
+  chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
     type: "addTab",
     tab: {
       id: tab.id,
@@ -94,16 +99,31 @@ chrome.tabs.onCreated.addListener((tab) => {
   });
 });
 
-chrome.tabs.onRemoved.addListener((tabID) => {
-  chrome.runtime.sendMessage({
+chrome.tabs.onRemoved.addListener(async (tabID) => {
+  // chrome.runtime.sendMessage({
+  //   type: "removeTab",
+  //   tabID,
+  // });
+
+  const currentTabs = await chrome.tabs.query({ currentWindow: true });
+
+  // find the tab that has url containing tabs.day
+  const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
+
+  chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
     type: "removeTab",
     tabID,
   });
 });
 
-chrome.tabs.onUpdated.addListener((tabID, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener(async (tabID, changeInfo, tab) => {
+  const currentTabs = await chrome.tabs.query({ windowId: tab.windowId });
+
+  // find the tab that has url containing tabs.day
+  const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
+
   if (changeInfo.url) {
-    chrome.runtime.sendMessage({
+    chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
       type: "updateTab",
       tab: {
         id: tab.id,
