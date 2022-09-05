@@ -54,6 +54,10 @@ async function update(tabs: Tab[], windowID: number): Promise<void> {
 
   const localTabStrings = tabs.map((tab) => tab.url);
   const currentTabStrings = currentTabs.map((tab) => tab.url ?? "-1");
+  // find the tabsTab index in currentTabs
+  let tabsTabIndex = currentTabs.findIndex((tab) =>
+    tab.url?.includes("tabs.day")
+  );
 
   const [localTabIndices, currentTabIndices] = longestCommonSubsequence(
     localTabStrings,
@@ -70,14 +74,11 @@ async function update(tabs: Tab[], windowID: number): Promise<void> {
       return;
     } else {
       if (tab.id) chrome.tabs.remove(tab.id);
+      if (i < tabsTabIndex) tabsTabIndex--;
     }
   });
 
-  let tabsDayCount = 0;
   tabs.forEach((tab, i) => {
-    if (tab.url?.includes("https://tabs.day")) {
-      tabsDayCount++;
-    }
     if (localTabIndices.includes(i)) {
       return;
     } else {
@@ -85,8 +86,9 @@ async function update(tabs: Tab[], windowID: number): Promise<void> {
       chrome.tabs.create({
         url: tab.url,
         windowId: windowID,
-        index: i + tabsDayCount,
+        index: i < tabsTabIndex ? tabsTabIndex + 1 : tabsTabIndex,
       });
+      if (i < tabsTabIndex) tabsTabIndex++;
     }
   });
 }

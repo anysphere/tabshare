@@ -49,6 +49,8 @@ async function update(tabs, windowID) {
     const currentTabs = await chrome.tabs.query({ windowId: windowID });
     const localTabStrings = tabs.map((tab) => tab.url);
     const currentTabStrings = currentTabs.map((tab) => tab.url ?? "-1");
+    // find the tabsTab index in currentTabs
+    let tabsTabIndex = currentTabs.findIndex((tab) => tab.url?.includes("tabs.day"));
     const [localTabIndices, currentTabIndices] = longestCommonSubsequence(localTabStrings, currentTabStrings);
     lastUpdate = Date.now();
     currentTabs.forEach((tab, i) => {
@@ -59,13 +61,11 @@ async function update(tabs, windowID) {
         else {
             if (tab.id)
                 chrome.tabs.remove(tab.id);
+            if (i < tabsTabIndex)
+                tabsTabIndex--;
         }
     });
-    let tabsDayCount = 0;
     tabs.forEach((tab, i) => {
-        if (tab.url?.includes("https://tabs.day")) {
-            tabsDayCount++;
-        }
         if (localTabIndices.includes(i)) {
             return;
         }
@@ -74,8 +74,10 @@ async function update(tabs, windowID) {
             chrome.tabs.create({
                 url: tab.url,
                 windowId: windowID,
-                index: i + tabsDayCount,
+                index: i < tabsTabIndex ? tabsTabIndex + 1 : tabsTabIndex,
             });
+            if (i < tabsTabIndex)
+                tabsTabIndex++;
         }
     });
 }
