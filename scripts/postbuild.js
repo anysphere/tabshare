@@ -29,6 +29,7 @@ const newManifest = {
     {
       ...manifest.content_scripts[0],
       js: [js],
+      css: [css],
     },
   ],
   web_accessible_resources: [
