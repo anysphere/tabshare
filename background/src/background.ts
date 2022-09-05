@@ -35,7 +35,7 @@ function longestCommonSubsequence(
       j--;
     } else if (dp[i - 1]![j] > dp[i]![j - 1]) {
       i--;
-    } else {
+    } else {  
       j--;
     }
   }

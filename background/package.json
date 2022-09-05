@@ -5,8 +5,8 @@
     "node": "^16.13.2"
   },
   "scripts": {
-    "start": "tsc -- watch",
-    "build": "tsc && rm ../public/manifest.json || true && cp manifest.json ../public/manifest.json"
+    "build": "tsc && rm ../public/manifest.json || true && cp manifest.json ../public/manifest.json && sd 'Object.defineProperty\\(exports.*' '' ../public/background.js",
+    "start": "tsc -- watch"
   },  
   "devDependencies": {
     "@types/mocha": "^9.1.0",

@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function longestCommonSubsequence(a, b, compare = (a, b) => a === b) {
     const m = a.length;
     const n = b.length;
