@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "@liveblocks/redux";
 
+import { addTab, removeTab } from "./store";
+
 import "./App.css";
 
 function WhoIsHere() {

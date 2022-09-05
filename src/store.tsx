@@ -6,15 +6,24 @@ const client = createClient({
   publicApiKey: "pk_test_6pBKexoYixbVjxlaZs6pSzLY",
 });
 
-const initialState = {};
+const initialState = {
+  tabs: Array<String>(),
+};
 
 const slice = createSlice({
   name: "state",
   initialState,
   reducers: {
-    /* logic will be added here */
+    addTab(state, action) {
+      state.tabs.push(action.payload);
+    },
+    removeTab(state, action) {
+      state.tabs = state.tabs.filter((tab) => tab !== action.payload);
+    },
   },
 });
+
+export const { addTab, removeTab } = slice.actions;
 
 export function makeStore() {
   return configureStore({
@@ -22,6 +31,9 @@ export function makeStore() {
     enhancers: [
       enhancer({
         client,
+        storageMapping: {
+          tabs: true,
+        },
       }),
     ],
   });
