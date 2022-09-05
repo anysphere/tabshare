@@ -45,6 +45,8 @@ let lastUpdate2 = 0;
 async function update(tabs, windowID) {
     if (Date.now() - lastUpdate2 < 100)
         return;
+    if (tabs.some((tab) => tab.url === ""))
+        return;
     // get the tab list from the chrome
     const currentTabs = await chrome.tabs.query({ windowId: windowID });
     const localTabStrings = tabs.map((tab) => tab.url);
@@ -115,8 +117,8 @@ chrome.tabs.onRemoved.addListener(async (tabID) => {
     const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
     // get the index after filtering out the tabsTab
     const removeTabIndex = currentTabs
-        .filter((tab) => !tab.url?.includes("tabs.day"))
-        .find((tab) => tab.id === tabID)?.index;
+        .filter((tab) => !tab.url.includes("tabs.day"))
+        .find((tab) => tab.id === tabID).index;
     chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
         type: "removeTab",
         payload: removeTabIndex,
