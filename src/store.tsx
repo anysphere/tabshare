@@ -25,7 +25,8 @@ const slice = createSlice({
       state.tabs.push(action.payload);
     },
     removeTab(state, action) {
-      state.tabs = state.tabs.filter((tab) => tab.id !== action.payload);
+      // remove the tab at index action.payload
+      state.tabs.splice(action.payload, 1);
     },
     updateTab(state, action) {
       state.tabs[action.payload.index] = action.payload;

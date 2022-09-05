@@ -103,9 +103,10 @@ chrome.tabs.onRemoved.addListener(async (tabID) => {
     const currentTabs = await chrome.tabs.query({ currentWindow: true });
     // find the tab that has url containing tabs.day
     const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
+    const removeTabIndex = currentTabs.find((tab) => tab.id === tabID)?.index;
     chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
         type: "removeTab",
-        payload: tabID,
+        payload: removeTabIndex,
     });
 });
 chrome.tabs.onUpdated.addListener(async (tabID, changeInfo, tab) => {

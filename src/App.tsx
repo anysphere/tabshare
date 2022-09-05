@@ -71,7 +71,7 @@ export default function App() {
     }
     console.log("update tabs", tabs);
     chrome.runtime.sendMessage({ type: "updateTabs", tabs });
-  }, [tabs]);
+  }, [JSON.stringify(tabs)]);
 
   return (
     <div>
