@@ -6,13 +6,14 @@ const client = createClient({
   publicApiKey: "pk_test_6pBKexoYixbVjxlaZs6pSzLY",
 });
 
-type Tab = {
+export type Tab = {
+  id: string;
   url: string;
   creator: string;
   timestamp: number;
 };
 
-const initialState = {
+export const initialState = {
   tabs: Array<Tab>(),
 };
 
@@ -24,7 +25,7 @@ const slice = createSlice({
       state.tabs.push(action.payload);
     },
     removeTab(state, action) {
-      state.tabs = state.tabs.filter((tab) => tab !== action.payload);
+      state.tabs = state.tabs.filter((tab) => tab.id !== action.payload.id);
     },
   },
 });
