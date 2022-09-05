@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Anysphere Tabshare",
+  "version": "0.0.1",
+  "content_scripts": [
+    {
+      "matches": ["https://tabs.day/*"],
+      "run_at": "document_end",
+      "js": [],
+      "css": [],
+      "media": []
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
