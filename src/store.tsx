@@ -25,12 +25,16 @@ const slice = createSlice({
       state.tabs.push(action.payload);
     },
     removeTab(state, action) {
-      state.tabs = state.tabs.filter((tab) => tab.id !== action.payload.id);
+      state.tabs = state.tabs.filter((tab) => tab.id !== action.payload);
+    },
+    updateTab(state, action) {
+      const index = state.tabs.findIndex((tab) => tab.id === action.payload.id);
+      state.tabs[index] = action.payload;
     },
   },
 });
 
-export const { addTab, removeTab } = slice.actions;
+export const { addTab, removeTab, updateTab } = slice.actions;
 
 export function makeStore() {
   return configureStore({

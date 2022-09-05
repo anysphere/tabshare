@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "@liveblocks/redux";
 
-import { addTab, removeTab, Tab, initialState } from "./store";
+import { updateTab, addTab, removeTab, Tab, initialState } from "./store";
 
 import "./App.css";
 
@@ -44,6 +44,8 @@ export default function App() {
         dispatch(addTab(request.payload));
       } else if (request.type === "removeTab") {
         dispatch(removeTab(request.payload));
+      } else if (request.type === "updateTab") {
+        dispatch(updateTab(request.payload));
       }
     };
 
