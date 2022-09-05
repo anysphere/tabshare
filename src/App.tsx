@@ -11,7 +11,7 @@ function WhoIsHere() {
   );
 
   return (
-    <div className="text text-center text-slate-700">
+    <div className="text text-slate-700">
       There are {othersUsersCount} other users online
     </div>
   );
@@ -33,8 +33,8 @@ export default function App() {
   }, [dispatch]);
 
   return (
-    <div className="container">
-      <h1>Liveblocks Redux Demo</h1>
+    <div>
+      <h1 className="text-indigo-400 text-lg">Liveblocks Redux Demo</h1>
       <WhoIsHere />
     </div>
   );
