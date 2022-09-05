@@ -22,7 +22,6 @@ function readFile(path, prefix, extension) {
 
 const js = readFile("assets", "index", "js");
 const css = readFile("assets", "index", "css");
-const logo = readFile("assets", "logo", "svg");
 
 const newManifest = {
   ...manifest,
@@ -30,13 +29,12 @@ const newManifest = {
     {
       ...manifest.content_scripts[0],
       js: [js],
-      css: [css],
     },
   ],
   web_accessible_resources: [
     {
       ...manifest.web_accessible_resources[0],
-      resources: [css, logo],
+      resources: [css],
     },
   ],
 };

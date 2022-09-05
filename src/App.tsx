@@ -9,7 +9,7 @@ import "./App.css";
 
 function WhoIsHere() {
   const othersUsersCount = useSelector(
-    (state) => state.liveblocks.others.length
+    (state: any) => state.liveblocks.others.length
   );
 
   return (

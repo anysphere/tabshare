@@ -21,11 +21,18 @@ if (body) {
   body.prepend(app);
 }
 
+const placeholder = document.getElementById("placeholder");
+if (placeholder) {
+  placeholder.style.display = "none";
+}
+
 const container = document.getElementById("react-root");
 const root = createRoot(container!);
 
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
+if (window.location.pathname !== "/" || import.meta.env.DEV) {
+  root.render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+}
