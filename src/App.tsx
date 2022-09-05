@@ -40,6 +40,7 @@ export default function App() {
       sender: chrome.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) => {
+      console.log("request", request);
       if (request.type === "addTab") {
         dispatch(addTab(request.payload));
       } else if (request.type === "removeTab") {
@@ -68,6 +69,7 @@ export default function App() {
     if (chrome.runtime === undefined) {
       return;
     }
+    console.log("update tabs", tabs);
     chrome.runtime.sendMessage({ type: "updateTabs", payload: tabs });
   }, [tabs]);
 
