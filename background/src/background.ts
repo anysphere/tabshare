@@ -43,7 +43,12 @@ function longestCommonSubsequence(
   return [res_a.reverse(), res_b.reverse()];
 }
 
+// store the time of the last update
+let lastUpdate = 0;
+let lastUpdate2 = 0;
+
 async function update(tabs: Tab[], windowID: number): Promise<void> {
+  if (Date.now() - lastUpdate2 < 100) return;
   // get the tab list from the chrome
   const currentTabs = await chrome.tabs.query({ windowId: windowID });
 
@@ -54,6 +59,8 @@ async function update(tabs: Tab[], windowID: number): Promise<void> {
     localTabStrings,
     currentTabStrings
   );
+
+  lastUpdate = Date.now();
 
   currentTabs.forEach((tab, i) => {
     if (
@@ -86,6 +93,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 chrome.tabs.onCreated.addListener(async (tab) => {
+  // if last update is recent, don't do anything
+  if (Date.now() - lastUpdate < 100) return;
+
   const currentTabs = await chrome.tabs.query({ windowId: tab.windowId });
 
   // find the tab that has url containing tabs.day
@@ -93,7 +103,7 @@ chrome.tabs.onCreated.addListener(async (tab) => {
 
   chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
     type: "addTab",
-    tab: {
+    payload: {
       id: tab.id,
       url: tab.url ?? "-1",
       creator: "chrome",
@@ -107,6 +117,7 @@ chrome.tabs.onRemoved.addListener(async (tabID) => {
   //   type: "removeTab",
   //   tabID,
   // });
+  if (Date.now() - lastUpdate < 100) return;
 
   const currentTabs = await chrome.tabs.query({ currentWindow: true });
 
@@ -115,24 +126,26 @@ chrome.tabs.onRemoved.addListener(async (tabID) => {
 
   chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
     type: "removeTab",
-    tabID,
+    payload: tabID,
   });
 });
 
 chrome.tabs.onUpdated.addListener(async (tabID, changeInfo, tab) => {
+  if (Date.now() - lastUpdate < 100) return;
+
   const currentTabs = await chrome.tabs.query({ windowId: tab.windowId });
 
   // find the tab that has url containing tabs.day
   const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
 
+  lastUpdate2 = Date.now();
+
   if (changeInfo.url) {
     chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
       type: "updateTab",
-      tab: {
-        id: tab.id,
-        url: tab.url ?? "-1",
-        creator: "chrome",
-        timestamp: Date.now(),
+      payload: {
+        index: tab.index,
+        url: changeInfo.url ?? "-1",
       },
     });
   }

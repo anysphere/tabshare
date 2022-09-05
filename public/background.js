@@ -39,12 +39,18 @@ function longestCommonSubsequence(a, b, compare = (a, b) => a === b) {
     }
     return [res_a.reverse(), res_b.reverse()];
 }
+// store the time of the last update
+let lastUpdate = 0;
+let lastUpdate2 = 0;
 async function update(tabs, windowID) {
+    if (Date.now() - lastUpdate2 < 100)
+        return;
     // get the tab list from the chrome
     const currentTabs = await chrome.tabs.query({ windowId: windowID });
     const localTabStrings = tabs.map((tab) => tab.url);
     const currentTabStrings = currentTabs.map((tab) => tab.url ?? "-1");
     const [localTabIndices, currentTabIndices] = longestCommonSubsequence(localTabStrings, currentTabStrings);
+    lastUpdate = Date.now();
     currentTabs.forEach((tab, i) => {
         if (currentTabIndices.includes(i) ||
             tab.url?.includes("https://tabs.day")) {
@@ -70,10 +76,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         update(message.tabs, sender.tab?.windowId ?? chrome.windows.WINDOW_ID_CURRENT);
     }
 });
-chrome.tabs.onCreated.addListener((tab) => {
-    chrome.runtime.sendMessage({
+chrome.tabs.onCreated.addListener(async (tab) => {
+    // if last update is recent, don't do anything
+    if (Date.now() - lastUpdate < 100)
+        return;
+    const currentTabs = await chrome.tabs.query({ windowId: tab.windowId });
+    // find the tab that has url containing tabs.day
+    const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
+    chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
         type: "addTab",
-        tab: {
+        payload: {
             id: tab.id,
             url: tab.url ?? "-1",
             creator: "chrome",
@@ -81,21 +93,34 @@ chrome.tabs.onCreated.addListener((tab) => {
         },
     });
 });
-chrome.tabs.onRemoved.addListener((tabID) => {
-    chrome.runtime.sendMessage({
+chrome.tabs.onRemoved.addListener(async (tabID) => {
+    // chrome.runtime.sendMessage({
+    //   type: "removeTab",
+    //   tabID,
+    // });
+    if (Date.now() - lastUpdate < 100)
+        return;
+    const currentTabs = await chrome.tabs.query({ currentWindow: true });
+    // find the tab that has url containing tabs.day
+    const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
+    chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
         type: "removeTab",
-        tabID,
+        payload: tabID,
     });
 });
-chrome.tabs.onUpdated.addListener((tabID, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener(async (tabID, changeInfo, tab) => {
+    if (Date.now() - lastUpdate < 100)
+        return;
+    const currentTabs = await chrome.tabs.query({ windowId: tab.windowId });
+    // find the tab that has url containing tabs.day
+    const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
+    lastUpdate2 = Date.now();
     if (changeInfo.url) {
-        chrome.runtime.sendMessage({
+        chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
             type: "updateTab",
-            tab: {
-                id: tab.id,
-                url: tab.url ?? "-1",
-                creator: "chrome",
-                timestamp: Date.now(),
+            payload: {
+                index: tab.index,
+                url: changeInfo.url ?? "-1",
             },
         });
     }
