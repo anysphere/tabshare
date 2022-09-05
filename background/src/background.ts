@@ -35,7 +35,7 @@ function longestCommonSubsequence(
       j--;
     } else if (dp[i - 1]![j] > dp[i]![j - 1]) {
       i--;
-    } else {  
+    } else {
       j--;
     }
   }
@@ -56,7 +56,10 @@ async function update(tabs: Tab[], windowID: number): Promise<void> {
   );
 
   currentTabs.forEach((tab, i) => {
-    if (currentTabIndices.includes(i)) {
+    if (
+      currentTabIndices.includes(i) ||
+      tab.url?.includes("https://tabs.day")
+    ) {
       return;
     } else {
       if (tab.id) chrome.tabs.remove(tab.id);

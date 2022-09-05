@@ -1,4 +1,5 @@
 "use strict";
+
 function longestCommonSubsequence(a, b, compare = (a, b) => a === b) {
     const m = a.length;
     const n = b.length;
@@ -45,7 +46,8 @@ async function update(tabs, windowID) {
     const currentTabStrings = currentTabs.map((tab) => tab.url ?? "-1");
     const [localTabIndices, currentTabIndices] = longestCommonSubsequence(localTabStrings, currentTabStrings);
     currentTabs.forEach((tab, i) => {
-        if (currentTabIndices.includes(i)) {
+        if (currentTabIndices.includes(i) ||
+            tab.url?.includes("https://tabs.day")) {
             return;
         }
         else {
