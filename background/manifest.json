@@ -11,6 +11,11 @@
       "media": []
     }
   ],
+  "permissions": [
+    "tabs",
+    "storage",
+    "https://tabs.day/*"
+  ],
   "web_accessible_resources": [
     {
       "resources": [],
