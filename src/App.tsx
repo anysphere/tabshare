@@ -62,7 +62,7 @@ export default function App() {
     if (chrome.runtime === undefined) {
       return;
     }
-    chrome.runtime.sendMessage({ type: "updateTabs", tabs });
+    chrome.runtime.sendMessage({ type: "updateTabs", payload: tabs });
   }, [tabs]);
 
   return (
