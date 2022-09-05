@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "vite",
+    "prebuild": "cd background && npm run build",
     "build": "tsc && vite build",
     "postbuild": "node ./scripts/postbuild.js"
   },
