@@ -61,13 +61,21 @@ async function update(tabs, windowID) {
                 chrome.tabs.remove(tab.id);
         }
     });
+    let tabsDayCount = 0;
     tabs.forEach((tab, i) => {
+        if (tab.url?.includes("https://tabs.day")) {
+            tabsDayCount++;
+        }
         if (localTabIndices.includes(i)) {
             return;
         }
         else {
             // create it at the right index
-            chrome.tabs.create({ url: tab.url, windowId: windowID, index: i });
+            chrome.tabs.create({
+                url: tab.url,
+                windowId: windowID,
+                index: i + tabsDayCount,
+            });
         }
     });
 }
@@ -103,7 +111,10 @@ chrome.tabs.onRemoved.addListener(async (tabID) => {
     const currentTabs = await chrome.tabs.query({ currentWindow: true });
     // find the tab that has url containing tabs.day
     const tabsTab = currentTabs.find((tab) => tab.url?.includes("tabs.day"));
-    const removeTabIndex = currentTabs.find((tab) => tab.id === tabID)?.index;
+    // get the index after filtering out the tabsTab
+    const removeTabIndex = currentTabs
+        .filter((tab) => !tab.url?.includes("tabs.day"))
+        .find((tab) => tab.id === tabID)?.index;
     chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
         type: "removeTab",
         payload: removeTabIndex,
@@ -120,7 +131,7 @@ chrome.tabs.onUpdated.addListener(async (tabID, changeInfo, tab) => {
         chrome.tabs.sendMessage(tabsTab?.id ?? -1, {
             type: "updateTab",
             payload: {
-                index: tab.index,
+                index: tab.index < tabsTab?.index ? tab.index : tab.index - 1,
                 url: changeInfo.url ?? "-1",
             },
         });

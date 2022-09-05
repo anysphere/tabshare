@@ -29,7 +29,7 @@ const slice = createSlice({
       state.tabs.splice(action.payload, 1);
     },
     updateTab(state, action) {
-      state.tabs[action.payload.index] = action.payload;
+      state.tabs[action.payload.index].url = action.payload.url;
     },
   },
 });
