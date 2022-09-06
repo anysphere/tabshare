@@ -45,6 +45,7 @@ let tabIdToIndex = {};
 async function update(tabs, windowID) {
     // get the tab list from the chrome
     const currentTabs = await chrome.tabs.query({ windowId: windowID });
+    const activeTab = currentTabs.find((tab) => tab.active);
     const localTabStrings = tabs.map((tab) => tab.url);
     const currentTabStrings = currentTabs.map((tab) => tab.url ?? "-1");
     // find the tabsTab index in currentTabs
@@ -88,6 +89,10 @@ async function update(tabs, windowID) {
                 tabsTabIndex++;
         }
     });
+    // let the activeTab be active
+    if (activeTab) {
+        chrome.tabs.update(activeTab.id, { active: true });
+    }
 }
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "updateTabs") {
