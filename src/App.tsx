@@ -74,7 +74,7 @@ export default function App() {
   }, [JSON.stringify(tabs)]);
 
   return (
-    <div>
+    <div className="p-4">
       <h1 className="text-indigo-400 text-lg">Tabs.day/{room}</h1>
       {loading ? (
         <div className="text text-slate-700">Loading...</div>
