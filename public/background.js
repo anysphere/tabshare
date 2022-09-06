@@ -62,8 +62,6 @@ async function update(tabs, windowID) {
             return;
         }
         else {
-            if (tab.url === "")
-                return;
             if (tab.id)
                 chrome.tabs.remove(tab.id);
             if (i < tabsTabIndex)
@@ -71,8 +69,6 @@ async function update(tabs, windowID) {
         }
     });
     tabs.forEach((tab, i) => {
-        if (tab.url === "")
-            return;
         if (localTabIndices.includes(i)) {
             return;
         }
