@@ -21,7 +21,7 @@ export function WritingBar({
       },
     },
     onUpdate: ({ editor }) => {
-      onUpdate(editor.getText());
+      onUpdate(editor.getHTML());
     },
   });
 

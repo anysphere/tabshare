@@ -91,12 +91,14 @@ export default function App() {
       ) : (
         <>
           <WhoIsHere />
-          <WritingBar
-            onUpdate={(s: string) => {
-              dispatch(updateText(s));
-            }}
-            content={text}
-          />
+          <div className="bg-slate-100 rounded-lg">
+            <WritingBar
+              onUpdate={(s: string) => {
+                dispatch(updateText(s));
+              }}
+              content={text}
+            />
+          </div>
         </>
       )}
       <div className="grid">
