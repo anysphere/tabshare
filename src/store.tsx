@@ -15,6 +15,7 @@ export type Tab = {
 
 export const initialState = {
   tabs: Array<Tab>(),
+  text: "",
 };
 
 const slice = createSlice({
@@ -31,10 +32,13 @@ const slice = createSlice({
     updateTab(state, action) {
       state.tabs[action.payload.index].url = action.payload.url;
     },
+    updateText(state, action) {
+      state.text = action.payload;
+    },
   },
 });
 
-export const { addTab, removeTab, updateTab } = slice.actions;
+export const { addTab, removeTab, updateTab, updateText } = slice.actions;
 
 export function makeStore() {
   return configureStore({
@@ -44,6 +48,7 @@ export function makeStore() {
         client,
         storageMapping: {
           tabs: true,
+          text: true,
         },
       }),
     ],

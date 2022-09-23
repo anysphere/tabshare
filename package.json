@@ -6,6 +6,8 @@
     "@liveblocks/client": "^0.17.11",
     "@liveblocks/redux": "^0.17.11",
     "@reduxjs/toolkit": "^1.8.5",
+    "@tiptap/react": "^2.0.0-beta.196",
+    "@tiptap/starter-kit": "^2.0.0-beta.196",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",

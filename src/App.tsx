@@ -2,8 +2,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "@liveblocks/redux";
+import { WritingBar } from "./Editor";
 
-import { updateTab, addTab, removeTab, Tab, initialState } from "./store";
+import {
+  updateTab,
+  addTab,
+  removeTab,
+  Tab,
+  initialState,
+  updateText,
+} from "./store";
 
 import "./App.css";
 
@@ -26,6 +34,8 @@ export default function App() {
     typeof window !== "undefined" ? window.location.pathname.slice(1) : "";
 
   const tabs = useSelector((state: any) => state.tabs);
+
+  const text = useSelector((state: any) => state.text);
 
   const loading = useSelector(
     (state: any) => state.liveblocks.isStorageLoading
@@ -79,7 +89,15 @@ export default function App() {
       {loading ? (
         <div className="text text-slate-700">Loading...</div>
       ) : (
-        <WhoIsHere />
+        <>
+          <WhoIsHere />
+          <WritingBar
+            onUpdate={(s: string) => {
+              dispatch(updateText(s));
+            }}
+            content={text}
+          />
+        </>
       )}
       <div className="grid">
         {tabs.map((tab: Tab) => (
