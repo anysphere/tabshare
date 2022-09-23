@@ -101,7 +101,7 @@ export default function App() {
           </div>
         </>
       )}
-      <div className="w-full h-0.5 bg-black my-1 mx-1 py-1"></div>
+      <div className="w-full h-px bg-black my-4 mx-1"></div>
       <div className="grid">
         {tabs.map((tab: Tab) => (
           <div key={tab.id} className="text text-slate-700">
