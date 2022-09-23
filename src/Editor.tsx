@@ -26,7 +26,14 @@ export function WritingBar({
   });
 
   useEffect(() => {
-    editor?.commands.setContent(content);
+    if (editor === undefined || editor === null) {
+      return;
+    }
+    const { from, to } = editor.state.selection;
+
+    editor.commands.setContent(content, false);
+
+    editor.commands.setTextSelection({ from, to });
   }, [content]);
 
   return <EditorContent editor={editor} />;

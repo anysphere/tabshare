@@ -16,6 +16,10 @@ export type Tab = {
 export const initialState = {
   tabs: Array<Tab>(),
   text: "",
+  cursor: {
+    x: 0,
+    y: 0,
+  },
 };
 
 const slice = createSlice({
@@ -50,11 +54,17 @@ export function makeStore() {
           tabs: true,
           text: true,
         },
+        // presenceMapping: {
+        //   cursor: true,
+        // },
       }),
     ],
   });
 }
 
 const store = makeStore();
+
+// const others = useSelector((state: any) => state.liveblocks.others);
+// const
 
 export default store;
