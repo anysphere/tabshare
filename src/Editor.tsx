@@ -2,7 +2,7 @@ import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import { EditorContent, useEditor } from "@tiptap/react";
-import React from "react";
+import React, { useEffect } from "react";
 
 export function WritingBar({
   onUpdate,
@@ -24,6 +24,10 @@ export function WritingBar({
       onUpdate(editor.getHTML());
     },
   });
+
+  useEffect(() => {
+    editor?.commands.setContent(content);
+  }, [content]);
 
   return <EditorContent editor={editor} />;
 }
