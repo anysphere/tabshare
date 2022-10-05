@@ -12,7 +12,6 @@ import { Container } from "./Components/Container";
 import {
   updateTab,
   addTab,
-  moveTab,
   removeTab,
   Tab,
   initialState,
@@ -59,7 +58,7 @@ export function MainAttention({ room }: { room: string }) {
   );
 
   const statisticsMap: [string, string][] = [
-    ["Number of people tabs.daying", othersUsersCount],
+    ["Number of people tabs.daying", othersUsersCount + 1],
   ];
 
   return (
@@ -116,14 +115,12 @@ export default function App() {
       sendResponse: (response?: any) => void
     ) => {
       console.log("request", request);
-      if (request.payload.type === "ADD") {
+      if (request.type === "addTab") {
         dispatch(addTab(request.payload));
-      } else if (request.payload.type === "REMOVE") {
+      } else if (request.type === "removeTab") {
         dispatch(removeTab(request.payload));
-      } else if (request.payload.type === "UPDATE") {
+      } else if (request.type === "updateTab") {
         dispatch(updateTab(request.payload));
-      } else if (request.payload.type === "MOVE") {
-        dispatch(moveTab(request.payload));
       }
     };
 
