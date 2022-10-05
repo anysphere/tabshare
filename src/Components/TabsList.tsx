@@ -29,7 +29,7 @@ export function TabsList({
         role="list"
         className={clsx(
           className,
-          "space-y-2 bg-white/60 py-2 px-10 text-center shadow-xl shadow-blue-900/5 backdrop-blur"
+          "space-y-2 bg-blue-50/70 py-2 px-10 text-center shadow-xl shadow-blue-900/5 backdrop-blur"
         )}
       >
         {tabs.map((tab, index) => {

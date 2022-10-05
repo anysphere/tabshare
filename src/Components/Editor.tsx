@@ -48,7 +48,7 @@ export function WritingSection({
 }) {
   return (
     <>
-      <div className="bg-blue-50 rounded-lg px-10 py-2">
+      <div className="bg-blue-50/70 rounded-lg px-10 py-2">
         <WritingBar onUpdate={onUpdate} content={content} />
       </div>
     </>
