@@ -7,6 +7,7 @@ import { WritingBar } from "./Editor";
 import {
   updateTab,
   addTab,
+  moveTab,
   removeTab,
   Tab,
   initialState,
@@ -34,6 +35,7 @@ export default function App() {
     typeof window !== "undefined" ? window.location.pathname.slice(1) : "";
 
   const tabs = useSelector((state: any) => state.tabs);
+  const actionsState = useSelector((state: any) => state.actions);
 
   const text = useSelector((state: any) => state.text);
 
@@ -51,12 +53,14 @@ export default function App() {
       sendResponse: (response?: any) => void
     ) => {
       console.log("request", request);
-      if (request.type === "addTab") {
+      if (request.payload.type === "ADD") {
         dispatch(addTab(request.payload));
-      } else if (request.type === "removeTab") {
+      } else if (request.payload.type === "REMOVE") {
         dispatch(removeTab(request.payload));
-      } else if (request.type === "updateTab") {
+      } else if (request.payload.type === "UPDATE") {
         dispatch(updateTab(request.payload));
+      } else if (request.payload.type === "MOVE") {
+        dispatch(moveTab(request.payload));
       }
     };
 
@@ -79,9 +83,13 @@ export default function App() {
     if (chrome.runtime === undefined) {
       return;
     }
-    console.log("update tabs", tabs);
-    chrome.runtime.sendMessage({ type: "updateTabs", tabs });
-  }, [JSON.stringify(tabs)]);
+    console.log("update tabs", tabs, actions);
+    chrome.runtime.sendMessage({
+      type: "updateTabs",
+      tabs,
+      actions: actionsState,
+    });
+  }, [JSON.stringify(tabs), JSON.stringify(actionsState)]);
 
   return (
     <div className="p-4">

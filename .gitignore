@@ -1,2 +1,5 @@
 build
 node_modules
+public/background.js
+public/manifest.js
+public/tabs.js
