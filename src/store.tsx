@@ -7,7 +7,7 @@ const client = createClient({
 });
 
 export type Tab = {
-  id: string;
+  id: string | number;
   url: string;
   creator: string;
   timestamp: number;
