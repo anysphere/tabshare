@@ -19,6 +19,7 @@ export type Action = {
   url: string; // Only for ADD and UPDATE
   id: string;
   by: string;
+  actionId: string;
 };
 
 export const initialState = {

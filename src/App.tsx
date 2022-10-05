@@ -1,5 +1,5 @@
 ///<reference types="chrome"/>
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "@liveblocks/redux";
 import { WritingBar } from "./Editor";
@@ -28,6 +28,8 @@ function WhoIsHere() {
   );
 }
 
+const actionIds = new Set();
+
 export default function App() {
   const dispatch = useDispatch();
 
@@ -53,6 +55,11 @@ export default function App() {
       sendResponse: (response?: any) => void
     ) => {
       console.log("request", request);
+      // if actionIds has the id, then we already have it
+      if (actionIds.has(request.payload.actionId)) {
+        return;
+      }
+      actionIds.add(request.payload.actionId);
       if (request.payload.type === "ADD") {
         dispatch(addTab(request.payload));
       } else if (request.payload.type === "REMOVE") {
@@ -71,13 +78,40 @@ export default function App() {
     };
   }, []);
 
+  const [firstTime, setFirstTime] = React.useState(true);
   useEffect(() => {
-    dispatch(actions.enterRoom(room, initialState));
+    // set the time to false in 200ms
+    if (firstTime) {
+      setTimeout(() => {
+        setFirstTime(false);
+      }, 200);
+    }
+  }, [firstTime]);
+
+  const enterRoom = useCallback(() => {
+    dispatch(
+      actions.enterRoom(room, {
+        tabs,
+        actions: actionsState,
+        text,
+        cursor: {
+          x: 0,
+          y: 0,
+        },
+      })
+    );
+  }, [firstTime]);
+
+  useEffect(() => {
+    console.log("USE EFFECT IS CALLED YAYAYAYAY");
+    if (!firstTime) {
+      enterRoom();
+    }
 
     return () => {
       dispatch(actions.leaveRoom(room));
     };
-  }, [dispatch]);
+  }, [enterRoom]);
 
   useEffect(() => {
     if (chrome.runtime === undefined) {
