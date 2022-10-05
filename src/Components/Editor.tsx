@@ -4,7 +4,7 @@ import Text from "@tiptap/extension-text";
 import { EditorContent, useEditor } from "@tiptap/react";
 import React, { useEffect } from "react";
 
-export function WritingBar({
+function WritingBar({
   onUpdate,
   content,
 }: {
@@ -37,4 +37,20 @@ export function WritingBar({
   }, [content]);
 
   return <EditorContent editor={editor} />;
+}
+
+export function WritingSection({
+  onUpdate,
+  content,
+}: {
+  onUpdate: (s: string) => void;
+  content: string;
+}) {
+  return (
+    <>
+      <div className="bg-blue-50 rounded-lg px-10 py-2">
+        <WritingBar onUpdate={onUpdate} content={content} />
+      </div>
+    </>
+  );
 }
